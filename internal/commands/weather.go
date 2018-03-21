@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type Weather struct {
@@ -33,10 +34,11 @@ type OpenWeatherMapResponse struct {
 	Weather []WeatherResponse `json:"weather"`
 }
 
-func getWeather(zip string) (weather OpenWeatherMapResponse) {
+func getWeather(zip string, country_code string) (weather OpenWeatherMapResponse) {
 	weather_url := fmt.Sprintf(
-		"http://api.openweathermap.org/data/2.5/weather?zip=%s,us&appid=%s",
+		"http://api.openweathermap.org/data/2.5/weather?zip=%s,%s&appid=%s",
 		zip,
+		country_code,
 		config.Fetch("open_weather_api_key"),
 	)
 
@@ -58,13 +60,20 @@ func getWeather(zip string) (weather OpenWeatherMapResponse) {
 }
 
 func (c Weather) Run() {
-	zip := c.Input.Args
+	parts := strings.Split(c.Input.Args, " ")
 
-	if len(zip) == 0 {
-		zip = "10011"
+	zip := "10011"
+	country_code := "us"
+
+	if len(parts) > 0 && parts[0] != "" {
+		zip = parts[0]
 	}
 
-	weather := getWeather(zip)
+	if len(parts) > 1 && parts[1] != "" {
+		country_code = parts[1]
+	}
+
+	weather := getWeather(zip, country_code)
 
 	forecast := Forecast{
 		City:        weather.Name,
