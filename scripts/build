@@ -2,6 +2,7 @@
 
 set -euo pipefail
 
-go build -o dist/handler cmd/handler/handler.go
-go build -o dist/cli cmd/cli/cli.go
 go build -o dist/api cmd/api/api.go
+go build -o dist/cli cmd/cli/cli.go
+go build -o dist/cloudwatch cmd/cloudwatch/cloudwatch.go
+go build -o dist/handler cmd/handler/handler.go

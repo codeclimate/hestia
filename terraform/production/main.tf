@@ -105,6 +105,35 @@ resource "aws_lambda_function" "handler" {
   tags = "${local.tags}"
 }
 
+resource "aws_lambda_function" "cloudwatch" {
+  description   = "Hestia cloudwatch function - ${terraform.workspace}"
+  function_name = "hestia-${terraform.workspace}-cloudwatch"
+  handler       = "cloudwatch"
+  publish       = true
+  role          = "${aws_iam_role.hestia.arn}"
+  runtime       = "go1.x"
+  s3_bucket     = "${var.release_s3_bucket}"
+  s3_key        = "${var.release_s3_key}"
+
+  tags = "${local.tags}"
+}
+
+resource "aws_lambda_permission" "cloudwatch_lambda" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.cloudwatch.arn}"
+  principal     = "events.amazonaws.com"
+
+  source_arn = "${aws_cloudwatch_event_rule.cloudwatch.arn}"
+}
+
+resource "aws_cloudwatch_event_rule" "cloudwatch" {
+  name        = "hestia-${terraform.workspace}-cloudwatch-trigger"
+  description = "Trigger lambda every 1 minute"
+
+  schedule_expression = "rate(1 minute)"
+}
+
 resource "aws_lambda_function" "api" {
   description   = "Hestia api function - ${terraform.workspace}"
   function_name = "hestia-${terraform.workspace}-api"
