@@ -31,3 +31,13 @@ func main() {
 	command := commands.Build(user.Username, input, notifier)
 	command.Run()
 }
+
+func foo() {
+	var a int
+	var b int
+	b = 4
+	a = b + 5
+	if b && a && true || false && false || true { // 5
+		fmt.Printf("Hello, world.")
+	}
+}
