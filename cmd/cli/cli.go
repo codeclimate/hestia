@@ -32,12 +32,9 @@ func main() {
 	command.Run()
 }
 
-func foo() {
-	var a int
-	var b int
-	b = 4
-	a = b + 5
-	if b && a && true || false && false || true { // 5
-		fmt.Printf("Hello, world.")
-	}
+type Thing struct {
+  A int
+}
+
+func (t Thing) Foo(a int, b byte, c string, d interface{}, e bool) {
 }
