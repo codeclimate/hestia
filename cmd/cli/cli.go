@@ -31,3 +31,10 @@ func main() {
 	command := commands.Build(user.Username, input, notifier)
 	command.Run()
 }
+
+type Thing struct {
+  A int
+}
+
+func (t Thing) Foo(a int, b byte, c string, d interface{}, e bool) {
+}
