@@ -3,6 +3,7 @@ FROM golang:1.10-stretch AS builder
 WORKDIR /go/src/github.com/codeclimate/hestia
 
 ARG DEP_VERSION=v0.4.1
+COPY dockerfile-version /etc/dockerfile-version
 RUN apt-get update && \
     apt-get install -y curl git make && \
     curl -fsSL -o /usr/local/bin/dep \
